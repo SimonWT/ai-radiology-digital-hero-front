@@ -1,4 +1,5 @@
 <template>
+<div id="app">
   <el-container>
     <el-header><Header/></el-header>
     <el-container>
@@ -9,6 +10,7 @@
       </el-container>
     </el-container>
   </el-container>
+</div>
 </template>
 
 <script>
@@ -22,6 +24,7 @@ export default {
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
 html, body, html * {
   font-family: 'Roboto', sans-serif;
+  margin: 0;
 }
 
 .el-header,

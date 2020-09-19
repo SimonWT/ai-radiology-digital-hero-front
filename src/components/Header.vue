@@ -8,7 +8,7 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
-    router="true"
+    :router="true"
   >
     <div class="header__logo">
       <svg
@@ -24,19 +24,14 @@
         <path
           d="M0 17.307h3.934l2.753-5.506h8.916l2.753 5.506h3.934L13.636 0H8.654L0 17.307zm7.736-7.604l3.409-6.818 3.409 6.818H7.736zM24.64 17.307h3.934V0h-3.933v17.307z"
           fill="#2BD600"
-        ></path></svg
-      ><span class="ant-typography header__logo__text"
-        >Сервис диагностики пневмонии по рентгеновским <br />изображениям
-        органов грудной полости</span
-      >
+        ></path>
+      </svg>
     </div>
     <el-menu-item index="/">Главная</el-menu-item>
     <el-menu-item index="upload">Загрузить</el-menu-item>
     <el-menu-item index="3">История</el-menu-item>
     <el-menu-item index="4">Личный кабинет</el-menu-item>
-    <el-menu-item index="about"
-      >О нас</el-menu-item
-    >
+    <el-menu-item index="about">О нас</el-menu-item>
   </el-menu>
 </template>
 
@@ -62,11 +57,14 @@ export default {
 }
 .header {
   &__logo {
-    float: left;
+    width: 200px;
     display: flex;
+    height: 60px;
     align-items: center;
+    float: left;
+    justify-content: center;
+    padding: 0;
     flex-direction: column;
-    padding: 7px 6px;
     &__image {
       height: 20px;
       width: 120px;
