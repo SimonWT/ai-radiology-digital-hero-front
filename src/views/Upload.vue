@@ -1,41 +1,65 @@
 <template>
-  <div id="dwv">
-    <el-radio-group
-      v-if="dataLoaded"
-      v-model="selectedTool"
-      @change="onChangeTool"
-    >
-      <el-radio-button
-        v-for="tool in Object.keys(tools)"
-        :label="tool"
-        :key="tool"
-        >{{ tool }}</el-radio-button
-      >
-    </el-radio-group>
-    <div class="layerContainer">
-      <div class="dropBox dropBoxBorder md-body-1">
-        <p>Перетяните изображение в это поле, чтобы закрузить</p>
-        <p>
-          Или <el-button type="primary" @click="clickUpload">Нажмите</el-button> чтобы выбрать файл.
-        </p>
-        <input
-          id="file-input"
-          type="file"
-          @change="handleSelectFiles"
-          multiple
-          name="name"
-          style="display: none;"
-        />
-      </div>
-      <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
-      <div class="drawDiv"></div>
-    </div>
+  <div class="">
+    <el-row>
+      <el-col :span="6">
+        <UploadForm />
+      </el-col>
+      <el-col :span="15" class="upload">
+        <div id="dwv">
+          <div class="tools-menu" v-if="dataLoaded">
+            <el-radio-group v-model="selectedTool" @change="onChangeTool">
+              <el-radio-button
+                v-for="tool in Object.keys(tools)"
+                :label="tool"
+                :key="tool"
+                >{{ tool }}</el-radio-button
+              >
+            </el-radio-group>
+            <el-button
+              type="danger"
+              class="ml-2"
+              icon="el-icon-delete"
+              circle
+            ></el-button>
+          </div>
+          <div class="layerContainer">
+            <div class="dropBox dropBoxBorder md-body-1">
+              <p>Перетяните изображение в это поле, чтобы закрузить</p>
+              <p>
+                Или
+                <el-button type="primary" @click="clickUpload"
+                  >Нажмите</el-button
+                >
+                чтобы выбрать файл.
+              </p>
+              <input
+                id="file-input"
+                type="file"
+                @change="handleSelectFiles"
+                multiple
+                name="name"
+                style="display: none;"
+              />
+            </div>
+            <canvas class="imageLayer"
+              >Only for HTML5 compatible browsers...</canvas
+            >
+            <div class="drawDiv"></div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="3" class="tools">
+          <el-button type="primary" class="mb-2">Загрузить предсказание</el-button>
+          <el-button type="success">Показать предсказание </el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import dwv from 'dwv';
 import Vue from 'vue';
+import UploadForm from '@/components/UploadForm';
 
 // gui overrides
 
@@ -52,6 +76,7 @@ dwv.image.decoderScripts = {
 
 export default {
   name: 'Upload',
+  components: { UploadForm },
   data() {
     return {
       versions: {
@@ -232,9 +257,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.upload {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  flex-basis: auto;
+  overflow: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  height: calc(100vh - 140px);
+}
+
 #dwv {
   font-family: Arial, Helvetica, sans-serif;
   height: 90%;
+  width: 100%;
 }
 
 .button-row {
@@ -280,6 +317,22 @@ export default {
 
 .el-radio-group {
   display: block;
+  //   padding-bottom: 25px;
+}
+
+.tools-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding-bottom: 25px;
+}
+
+.tools{
+    display: flex;
+    flex-direction: column;
+    .el-button{
+        margin-left: 0 !important;
+        padding: 10px;
+    }
 }
 </style>

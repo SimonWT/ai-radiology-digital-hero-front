@@ -3,10 +3,10 @@
   <el-container>
     <el-header><Header/></el-header>
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px" v-if="false">Боковое меню</el-aside>
       <el-container>
         <el-main><router-view></router-view></el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer>Подвал</el-footer>
       </el-container>
     </el-container>
   </el-container>
@@ -43,8 +43,8 @@ html, body, html * {
 }
 
 .el-main {
-  background-color: #e9eef3;
-  color: #333;
+  // background-color: #e9eef3;
+  // color: #333;
   text-align: center;
   line-height: 160px;
   height: calc(100vh - 120px);
