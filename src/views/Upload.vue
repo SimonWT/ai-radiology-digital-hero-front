@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    Дарова нах
+  <div class="upload">
+    Загружаю нах
   </div>
 </template>
 
@@ -8,6 +8,6 @@
 // @ is an alias to /src
 
 export default {
-  name: 'Home',
+  name: 'Upload',
 };
 </script>
