@@ -20,8 +20,8 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    user(state) {
-      return state.user;
+    user_email(state) {
+      return state.user_email;
     },
     isLoggedIn: (state) => !!state.user_email,
   },
