@@ -28,7 +28,7 @@ firebase.initializeApp({
   appId: '1:518940199497:web:850f0e5ffed9e5333b0d98',
 });
 
-export const db = firebase.app().database();
+export const fbApp = firebase.app();
 
 new Vue({
   router,

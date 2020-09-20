@@ -6,7 +6,7 @@
       <el-aside width="300px" v-if="showAside"><History :history="history" /></el-aside>
       <el-container>
         <el-main><router-view @show-history="showHistory"></router-view></el-main>
-        <el-footer>Подвал</el-footer>
+        <el-footer v-if="false">Подвал</el-footer>
       </el-container>
     </el-container>
   </el-container>
@@ -16,7 +16,7 @@
 <script>
 import Header from './components/Header'
 import History from './components/History'
-import { db } from './main'
+import { fbApp } from './main'
 
 export default {
   components: {Header, History},
@@ -37,7 +37,7 @@ export default {
       this.showAside = !this.showAside
     },
     listenHistory(){
-      db.ref('History').on('value', (snapshot) => {
+      fbApp.database().ref('History').on('value', (snapshot) => {
         this.history = []
         snapshot.forEach((doc) => {
           const id = doc.key

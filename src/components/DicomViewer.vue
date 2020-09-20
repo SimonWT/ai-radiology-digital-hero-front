@@ -1,66 +1,35 @@
 <template>
-  <div class="">
-    <el-row>
-      <el-col :span="6">
-        <UploadForm />
-      </el-col>
-      <el-col :span="15" class="upload">
-        <div id="dwv">
-          <div class="tools-menu" v-if="dataLoaded">
-            <el-radio-group v-model="selectedTool" @change="onChangeTool">
-              <el-radio-button
-                v-for="tool in Object.keys(tools)"
-                :label="tool"
-                :key="tool"
-                >{{ tool }}</el-radio-button
-              >
-            </el-radio-group>
-            <el-button
-              @click="onReset"
-              type="danger"
-              class="ml-2"
-              icon="el-icon-delete"
-              circle
-            ></el-button>
-          </div>
-          <div class="layerContainer">
-            <div class="dropBox dropBoxBorder md-body-1">
-              <p>Перетяните изображение в это поле, чтобы закрузить</p>
-              <p>
-                Или
-                <el-button type="primary" @click="clickUpload"
-                  >Нажмите</el-button
-                >
-                чтобы выбрать файл.
-              </p>
-              <input
-                id="file-input"
-                type="file"
-                @change="handleSelectFiles"
-                multiple
-                name="name"
-                style="display: none;"
-              />
-            </div>
-            <canvas class="imageLayer"
-              >Only for HTML5 compatible browsers...</canvas
-            >
-            <div class="drawDiv"></div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="3" class="tools">
-          <el-button type="primary" class="mb-2">Загрузить предсказание</el-button>
-          <el-button type="success">Показать предсказание </el-button>
-      </el-col>
-    </el-row>
+  <div class="dicom-viewer">
+    <div class="tools-menu">
+      <el-radio-group v-model="selectedTool" @change="onChangeTool">
+        <el-radio-button
+          v-for="tool in Object.keys(tools)"
+          :label="tool"
+          :key="tool"
+          >{{ tool }}</el-radio-button
+        >
+      </el-radio-group>
+      <el-button
+        style="margin-top: -10px;"
+        @click="onReset"
+        type="warning"
+        class="ml-2"
+        >Reset</el-button
+      >
+    </div>
+    <div id="dwv">
+      <div class="layerContainer">
+        <canvas class="imageLayer"></canvas>
+        <div class="drawDiv"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import dwv from 'dwv';
+import { fbApp } from '../main';
 import Vue from 'vue';
-import UploadForm from '@/components/UploadForm';
 
 // gui overrides
 
@@ -77,7 +46,6 @@ dwv.image.decoderScripts = {
 
 export default {
   name: 'Upload',
-  components: { UploadForm },
   data() {
     return {
       versions: {
@@ -113,62 +81,10 @@ export default {
       containerDivId: 'dwv',
       tools: this.tools,
     });
-    // handle load events
-    let nReceivedError = null;
-    let nReceivedAbort = null;
-    this.dwvApp.addEventListener('load-start', (/*event*/) => {
-      this.dataLoaded = false;
-      nReceivedError = 0;
-      nReceivedAbort = 0;
-    });
-    this.dwvApp.addEventListener('load-progress', (event) => {
-      this.loadProgress = event.loaded;
-    });
-    this.dwvApp.addEventListener('load', (/*event*/) => {
-      // set dicom tags
-      this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData());
-      // set the selected tool
-      let selectedTool = 'Scroll';
-      if (
-        this.dwvApp.isMonoSliceData() &&
-        this.dwvApp.getImage().getNumberOfFrames() === 1
-      ) {
-        selectedTool = 'ZoomAndPan';
-      }
-      this.onChangeTool(selectedTool);
-      // set data loaded flag
-      this.dataLoaded = true;
-    });
-    this.dwvApp.addEventListener('load-end', (/*event*/) => {
-      if (nReceivedError) {
-        this.loadProgress = 0;
-        alert('Received errors during load. Check log for details.');
-      }
-      if (nReceivedAbort) {
-        this.loadProgress = 0;
-        alert('Load was aborted.');
-      }
-    });
-    this.dwvApp.addEventListener('error', (/*event*/) => {
-      //console.error(event.error)
-      ++nReceivedError;
-    });
-    this.dwvApp.addEventListener('abort', (/*event*/) => {
-      ++nReceivedAbort;
-    });
-
-    // handle key events
-    this.dwvApp.addEventListener('keydown', (event) => {
-      this.dwvApp.defaultOnKeydown(event);
-    });
-    // handle window resize
-    window.addEventListener('resize', this.dwvApp.onResize);
-
-    // setup drop box
-    this.setupDropbox();
-
-    // possible load from location
-    dwv.utils.loadFromUri(window.location.href, this.dwvApp);
+    this.dwvApp.loadURLs([
+      'https://firebasestorage.googleapis.com/v0/b/digiathero---med.appspot.com/o/xray.png?alt=media&token=d23dfa66-c182-4908-876f-f178b9d90c48',
+      //   'https://firebasestorage.googleapis.com/v0/b/digiathero---med.appspot.com/o/bbmri-53323851.dcm?alt=media&token=e8b90032-d1f8-405d-8e8b-c4a5fd747ad0',
+    ]);
   },
   methods: {
     clickUpload() {
@@ -195,7 +111,8 @@ export default {
       }
     },
     onReset: function() {
-      this.dwvApp.resetDisplay();
+      this.dwvApp.restoreOriginalImage();
+      //   this.dwvApp.resetLayout();
     },
     setupDropbox() {
       // start listening to drag events on the layer container
@@ -251,6 +168,35 @@ export default {
       this.dwvApp.loadFiles(event.dataTransfer.files);
       // hide drop box
       this.hideDropbox();
+    },
+    loadFiles(files) {
+      this.dwvApp.loadFiles(files);
+    },
+    downloadFile() {
+      var storage = fbApp.storage();
+      var storageRef = storage.ref();
+      storageRef
+        .child('dicom.dcm')
+        .getDownloadURL()
+        .then((url) => {
+          console.log(url);
+          // This can be downloaded directly:
+          var xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          xhr.onload = function(event) {
+            var blob = xhr.response;
+          };
+          xhr.open('GET', url);
+          xhr.send();
+          //   console.log(xhr);
+          this.loadFiles([blob]);
+          //   // Or inserted into an <img> element:
+          //   var img = document.getElementById('myimg');
+          //   img.src = url;
+        })
+        .catch(function(error) {
+          // Handle any errors
+        });
     },
   },
 };
@@ -328,12 +274,24 @@ export default {
   padding-bottom: 25px;
 }
 
-.tools{
-    display: flex;
-    flex-direction: column;
-    .el-button{
-        margin-left: 0 !important;
-        padding: 10px;
-    }
+.tools {
+  display: flex;
+  flex-direction: column;
+  .el-button {
+    margin-left: 0 !important;
+    padding: 10px;
+  }
+}
+
+.dicom-viewer {
+  display: block;
+  flex: 1;
+  flex-basis: auto;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 20px;
+  text-align: center;
+  line-height: normal;
+  height: calc(100vh - 120px);
 }
 </style>
