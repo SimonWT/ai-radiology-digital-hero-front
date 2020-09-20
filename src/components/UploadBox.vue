@@ -36,21 +36,32 @@ export default {
   },
   methods: {
     handleChange(file, fileList) {
-      console.log(file, fileList);
+        this.fileList = fileList
     },
     handleRemove() {},
     handlePreview() {},
     async sumbitUpload() {
-      await setTimeout(() => {
+      const form = new FormData();
+      this.fileList.forEach(el => {
+          console.log(el.name)
+          form.append('file[]', el.raw, el.name);
+      })
+      this.axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:5000/uploader',
+        data: form,
+        headers: {
+          'content-type': `multipart/form-data;`,
+        },
+      }).then(resp=>{
         this.$notify({
           title: 'Успех',
           message: 'Файлы загруженны на сервер',
           type: 'success',
         });
-        this.$emit('uploaded')
-        this.fileList = []
-      }, 100);
-    //   await this.axios.post('/back');
+        this.$emit('uploaded');
+        this.fileList = [];
+      })
     },
   },
 };
