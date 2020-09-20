@@ -4,7 +4,6 @@
     class="el-menu-demo"
     id="header-menu"
     mode="horizontal"
-    @select="handleSelect"
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
@@ -29,7 +28,7 @@
     </div>
     <el-menu-item index="/">Главная</el-menu-item>
     <el-menu-item index="upload">Загрузить</el-menu-item>
-    <el-menu-item index="3">История</el-menu-item>
+    <el-menu-item @click.native="$emit('show-history')" >История</el-menu-item>
     <el-menu-item index="4">Личный кабинет</el-menu-item>
     <el-menu-item index="about">О нас</el-menu-item>
   </el-menu>
@@ -42,11 +41,6 @@ export default {
       activeIndex: '1',
       activeIndex2: '1',
     };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
   },
 };
 </script>

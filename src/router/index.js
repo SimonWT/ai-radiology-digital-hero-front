@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Upload from '../views/Upload.vue'
+import Observation from '../views/Observation.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/upload',
     name: 'Upload',
     component: Upload
+  },
+  {
+    path: '/observation/:id',
+    name: 'Observation',
+    component: Observation
   },
   {
     path: '/about',

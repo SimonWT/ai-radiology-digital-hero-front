@@ -8,8 +8,13 @@ import locale from 'element-ui/lib/locale/lang/ru-RU';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as firebase from 'firebase';
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+ 
+Vue.use(VueAxios, axios)
 
 Vue.use(ElementUI, { locale });
+
 
 Vue.config.productionTip = false;
 

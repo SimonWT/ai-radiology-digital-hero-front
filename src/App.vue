@@ -1,11 +1,11 @@
 <template>
 <div id="app">
   <el-container>
-    <el-header><Header/></el-header>
+    <el-header><Header @show-history="toggleHistory" /></el-header>
     <el-container>
-      <el-aside width="200px" v-if="false">Боковое меню</el-aside>
+      <el-aside width="300px" v-if="showAside"><History :history="history" /></el-aside>
       <el-container>
-        <el-main><router-view></router-view></el-main>
+        <el-main><router-view @show-history="showHistory"></router-view></el-main>
         <el-footer>Подвал</el-footer>
       </el-container>
     </el-container>
@@ -15,8 +15,38 @@
 
 <script>
 import Header from './components/Header'
+import History from './components/History'
+import { db } from './main'
+
 export default {
-  components: {Header}
+  components: {Header, History},
+  data() {
+    return {
+      showAside: false,
+      history: []
+    }
+  },
+  created(){
+    this.listenHistory()
+  },
+  methods: {
+    showHistory(){
+      this.showAside = true
+    },
+    toggleHistory(){
+      this.showAside = !this.showAside
+    },
+    listenHistory(){
+      db.ref('History').on('value', (snapshot) => {
+        this.history = []
+        snapshot.forEach((doc) => {
+          const id = doc.key
+          let info = doc.val()
+          this.history.push({id, ...info})
+        })
+      })
+    }
+  }
 }
 </script>
 
@@ -36,17 +66,19 @@ html, body, html * {
 }
 
 .el-aside {
-  background-color: #d3dce6;
-  color: #333;
+  // background-color: #d3dce6;
+  color: #1a1a1a;
+  // border-right: 1px solid rgba(0,0,0,0.6);
+  box-shadow: 10px 0px 12px 0 rgba(0, 0, 0, 0.1);
   text-align: center;
-  line-height: 200px;
+  line-height: 20px;
 }
 
 .el-main {
   // background-color: #e9eef3;
   // color: #333;
   text-align: center;
-  line-height: 160px;
+  line-height: normal;
   height: calc(100vh - 120px);
 }
 
