@@ -1,6 +1,7 @@
 <template>
   <div class="history">
-    <h5 class="h5">История</h5>
+    <h5 class="h5">История <i style="position: absolute; right: 14px; cursor: pointer;
+    top: 16px;" class="el-icon-back"></i></h5> 
     <ul class="infinite-list" style="overflow:auto">
       <li v-for="(item, i) in history" class="infinite-list-item" :key="i">
         <el-card shadow="hover" class="card" @click.native="showItem(item.id)">
@@ -48,7 +49,9 @@ export default {
     };
   },
   methods: {
-    showItem() {},
+    showItem(id) {
+        this.$router.push(`/observation/${id}`)
+    },
     showAccess(id) {
         this.$refs.modal.open()
     }
@@ -56,7 +59,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .history {
   height: 100%;
   width: 100%;

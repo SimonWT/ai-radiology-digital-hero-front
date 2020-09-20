@@ -36,6 +36,12 @@
         <el-button class="" type="">Отправить на дообучение</el-button>
       </el-form-item>
     </el-form>
+    <div>
+      <p class="font-weight-bold">Скачать:</p>
+       <el-button class="mb-1" type=""><i class="el-icon-notebook-2" />SR отчет</el-button>
+        <el-button class="" type=""><i class="el-icon-document" />Текстовый отчет</el-button>
+        <el-button class="" type=""> <i class="el-icon-circle-check"/> Согласие на обработку персональных данных</el-button>
+    </div>
   </div>
 </template>
 

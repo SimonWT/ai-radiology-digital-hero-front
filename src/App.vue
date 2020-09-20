@@ -1,7 +1,7 @@
 <template>
 <div id="app">
   <el-container>
-    <el-header><Header @show-history="toggleHistory" /></el-header>
+    <el-header v-show="$store.getters.isLoggedIn"><Header @show-history="toggleHistory" /></el-header>
     <el-container>
       <el-aside width="300px" v-if="showAside"><History :history="history" /></el-aside>
       <el-container>
@@ -28,6 +28,7 @@ export default {
   },
   created(){
     this.listenHistory()
+    console.log(this.$route)
   },
   methods: {
     showHistory(){
@@ -79,7 +80,7 @@ html, body, html * {
   // color: #333;
   text-align: center;
   line-height: normal;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 60px);
 }
 
 body > .el-container {

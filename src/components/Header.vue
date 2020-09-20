@@ -27,10 +27,10 @@
       </svg>
     </div>
     <el-menu-item index="/">Главная</el-menu-item>
-    <el-menu-item index="upload">Загрузить</el-menu-item>
+    <el-menu-item index="/upload">Загрузить</el-menu-item>
     <el-menu-item @click.native="$emit('show-history')" >История</el-menu-item>
     <el-menu-item index="4">Личный кабинет</el-menu-item>
-    <el-menu-item index="about">О нас</el-menu-item>
+    <el-menu-item index="/about">О нас</el-menu-item>
   </el-menu>
 </template>
 

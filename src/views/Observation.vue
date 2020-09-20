@@ -7,12 +7,6 @@
       <el-col :span="15" class="viewer">
           <DicomViewer />
       </el-col>
-      <el-col :span="0" class="tools">
-        <el-button type="primary" class="mb-2"
-          >Загрузить предсказание</el-button
-        >
-        <el-button type="success">Показать предсказание </el-button>
-      </el-col>
     </el-row>
   </div>
 </template>

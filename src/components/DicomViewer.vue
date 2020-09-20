@@ -1,6 +1,8 @@
 <template>
   <div class="dicom-viewer">
     <div class="tools-menu">
+    
+      <el-checkbox v-model="isPrediction" label="Предсказание" border class="mr-1"></el-checkbox>
       <el-radio-group v-model="selectedTool" @change="onChangeTool">
         <el-radio-button
           v-for="tool in Object.keys(tools)"
@@ -71,6 +73,7 @@ export default {
       dropboxClassName: 'dropBox',
       borderClassName: 'dropBoxBorder',
       hoverClassName: 'hover',
+      isPrediction: false
     };
   },
   mounted() {
