@@ -1,8 +1,12 @@
 <template>
   <div class="dicom-viewer">
     <div class="tools-menu">
-    
-      <el-checkbox v-model="isPrediction" label="Предсказание" border class="mr-1"></el-checkbox>
+      <el-checkbox
+        v-model="isPrediction"
+        label="Предсказание"
+        border
+        class="mr-1"
+      ></el-checkbox>
       <el-radio-group v-model="selectedTool" @change="onChangeTool">
         <el-radio-button
           v-for="tool in Object.keys(tools)"
@@ -48,6 +52,9 @@ dwv.image.decoderScripts = {
 
 export default {
   name: 'Upload',
+  props: {
+    observation: {},
+  },
   data() {
     return {
       versions: {
@@ -73,7 +80,7 @@ export default {
       dropboxClassName: 'dropBox',
       borderClassName: 'dropBoxBorder',
       hoverClassName: 'hover',
-      isPrediction: false
+      isPrediction: false,
     };
   },
   mounted() {
@@ -84,14 +91,25 @@ export default {
       containerDivId: 'dwv',
       tools: this.tools,
     });
-    this.dwvApp.loadURLs([
-      'https://firebasestorage.googleapis.com/v0/b/digiathero---med.appspot.com/o/xray.png?alt=media&token=d23dfa66-c182-4908-876f-f178b9d90c48',
-      //   'https://firebasestorage.googleapis.com/v0/b/digiathero---med.appspot.com/o/bbmri-53323851.dcm?alt=media&token=e8b90032-d1f8-405d-8e8b-c4a5fd747ad0',
-    ]);
+    const url = this.observation.Source_url;
+    console.log(url);
+    this.dwvApp.loadURLs([url]);
   },
   methods: {
     clickUpload() {
       document.getElementById('file-input').click();
+    },
+    updateDwv() {
+      // create app
+      this.dwvApp = new dwv.App();
+      // initialise app
+      this.dwvApp.init({
+        containerDivId: 'dwv',
+        tools: this.tools,
+      });
+      const url = this.observation.Source_url;
+      console.log(url);
+      this.dwvApp.loadURLs([url]);
     },
     handleSelectFiles(event) {
       event.stopPropagation();

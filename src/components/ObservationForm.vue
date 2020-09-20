@@ -15,6 +15,7 @@
         <el-date-picker
           v-model="form.datetime"
           type="datetime"
+          disabled
           placeholder="Select date and time"
         >
         </el-date-picker>
@@ -47,6 +48,10 @@
 
 <script>
 export default {
+  name: "ObservationForm",
+  props: {
+    observation:{}
+  },
   data() {
     return {
       predictionReady: true,
@@ -93,10 +98,11 @@ export default {
       pathologiesApproves: [],
     };
   },
-  created() {
-    this.pathologiesApproves = Object.keys(this.pathologies).map((el) => {
-      return { label: el, value: this.pathologies[el] > 0 };
+  mounted() {
+    this.pathologiesApproves = Object.keys(this.observation.Predicitons).map((el) => {
+      return { label: el, value: this.observation.Predicitons[el] > 0 };
     });
+    this.form.datetime = Date(this.observation.Date)
   },
 };
 </script>

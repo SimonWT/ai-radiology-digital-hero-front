@@ -3,7 +3,7 @@
   <el-container>
     <el-header v-show="$store.getters.isLoggedIn"><Header @show-history="toggleHistory" /></el-header>
     <el-container>
-      <el-aside width="300px" v-if="showAside"><History :history="history" /></el-aside>
+      <el-aside width="300px" v-if="showAside"><History @hide-history="toggleHistory" :history="history" /></el-aside>
       <el-container>
         <el-main><router-view @show-history="showHistory"></router-view></el-main>
         <el-footer v-if="false">Подвал</el-footer>
@@ -40,10 +40,13 @@ export default {
     listenHistory(){
       fbApp.database().ref('History').on('value', (snapshot) => {
         this.history = []
+        // let iter = snapshot.numChildren()
+        let iter = 1
         snapshot.forEach((doc) => {
           const id = doc.key
           let info = doc.val()
-          this.history.push({id, ...info})
+          this.history.push({id, Num: iter, ...info})
+          iter += 1
         })
       })
     }
