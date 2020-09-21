@@ -32,7 +32,7 @@
             </div>
 
             <div class="action">
-              <el-dropdown trigger="hover">
+              <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                   <i class="icon el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -51,12 +51,11 @@
         </el-card>
       </li>
     </ul>
-    <UserAccessModal ref="modal" />
   </div>
 </template>
 
 <script>
-import UserAccessModal from './UserAccessModal';
+// import UserAccessModal from './UserAccessModal';
 export default {
   props: {
     history: {
@@ -64,7 +63,7 @@ export default {
       default: [],
     },
   },
-  components: { UserAccessModal },
+  // components: { UserAccessModal },
   methods: {
     showItem(id) {
       this.$store.dispatch('setObservation', this.history[id]);
@@ -73,7 +72,7 @@ export default {
     showAccess(id) {
       const key = this.history[id].id;
       const code = this.history[id].PatientPassword;
-      this.$refs.modal.open(key, code);
+      this.$emit('show-user-access', {key, code})
     },
     getDate(mili) {
       var date = new Date(mili);
