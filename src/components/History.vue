@@ -12,13 +12,21 @@
     <ul class="infinite-list" style="overflow:auto">
       <li v-for="(item, i) in history" class="infinite-list-item" :key="i">
         <el-card shadow="hover" class="card" @click.native="showItem(i)">
-        <div class="card-info">
-            <span class="id mb-1">#{{ item.Num }}</span>
-            <span class="processing" v-if="!item.Predicted">Обработка</span>
-            <span class="done" v-else>Готово</span>
-        </div>
           <div class="card-info">
-            <div class="date">{{ getDate(item.Date) }}</div>
+            <span class="id mb-1">#{{ item.Num }}</span>
+            <el-tag
+              size="small"
+              class="status processing"
+              v-if="!item.Predicted"
+              >Обработка</el-tag
+            >
+            <el-tag size="small" type="success" class="status done" v-else
+              >Обработан</el-tag
+            >
+          </div>
+          <div class="card-info">
+            <div class="date"> <i class="el-icon-date mr-1"/> {{ getDate(item.Date) }}</div>
+
             <div class="action">
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
@@ -59,16 +67,26 @@ export default {
       this.$router.push(`/observation/${this.history[id].id}`);
     },
     showAccess(id) {
-      const key = this.history[id].id
-      const code = this.history[id].PatientPassword
+      const key = this.history[id].id;
+      const code = this.history[id].PatientPassword;
       this.$refs.modal.open(key, code);
     },
-    getDate(mili){
-        var date = new Date(mili);
-        var datetext = date.toTimeString();
-        datetext = datetext.split(' ')[0];
-        return ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear() + ' ' + datetext
-    }
+    getDate(mili) {
+      var date = new Date(mili);
+      var datetext = date.toTimeString();
+      datetext = datetext.split(' ')[0];
+      return (
+        (date.getMonth() > 8
+          ? date.getMonth() + 1
+          : '0' + (date.getMonth() + 1)) +
+        '/' +
+        (date.getDate() > 9 ? date.getDate() : '0' + date.getDate()) +
+        '/' +
+        date.getFullYear() +
+        ' ' +
+        datetext
+      );
+    },
   },
 };
 </script>
@@ -127,16 +145,13 @@ li {
   font-weight: bold;
 }
 
-.card-info{
-    display: flex;
-    justify-content: space-between;
+.card-info {
+  display: flex;
+  justify-content: space-between;
 }
 
-.processing{
-    color: #409EFF;
-}
-
-.done{
-    color: #67C23A;
+.status {
+  // margin-top: -15px;
+  // margin-right: -15px;
 }
 </style>
