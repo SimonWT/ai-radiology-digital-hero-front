@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { backendUrl } from '../main';
+
 export default {
   name: 'UploadBox',
   data() {
@@ -51,7 +53,7 @@ export default {
       })
       this.axios({
         method: 'POST',
-        url: 'http://127.0.0.1:5000/uploader',
+        url: `${backendUrl}/uploader`,
         data: form,
         headers: {
           'content-type': `multipart/form-data;`,

@@ -89,7 +89,8 @@
 </template>
 
 <script>
-import { fbApp } from '../main';
+import { fbApp, backendUrl } from '../main';
+
 
 export default {
   name: 'ObservationForm',
@@ -147,7 +148,7 @@ export default {
         pathologies: Predictions,
       };
       const response = await this.axios.post(
-        `http://127.0.0.1:5000/get_${format}`,
+        `${backendUrl}/get_${format}`,
         body
       );
       const downloadUrl = response.data.path;

@@ -10,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import * as firebase from 'firebase';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+const env = require('../env')
+export const backendUrl = env.backend_url
  
 Vue.use(VueAxios, axios)
 

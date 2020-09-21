@@ -1,4 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const env = require('./env')
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
@@ -16,6 +17,6 @@ module.exports = {
     ]
   },
   devServer: {
-    proxy: 'http://127.0.0.1:5000'
+    proxy: env.backend_url
   }
 } 
