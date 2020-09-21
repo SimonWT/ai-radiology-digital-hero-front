@@ -2,10 +2,11 @@
   <div class="dicom-viewer">
     <div class="tools-menu" v-if="!isPatient">
       <el-checkbox
-        v-model="isPrediction"
+        v-model="showPredictedVisual"
         :disabled="!observation.Predicted"
-        label="Предсказание"
+        label="Показать визуализацию"
         border
+        @change="toggleVisualisation"
         class="mr-1"
       ></el-checkbox>
       <el-radio-group v-model="selectedTool" @change="onChangeTool">
@@ -113,12 +114,12 @@ export default {
         containerDivId: 'dwv',
         tools: this.tools,
       });
-      const url = this.observation.Source_url;
+      const url = this.showPredictedVisual ? this.observation.Visualisation_url : this.observation.Source_url;
       console.log(url);
       this.dwvApp.loadURLs([url]);
     },
     toggleVisualisation(){
-
+      this.updateDwv()
     },
     handleSelectFiles(event) {
       event.stopPropagation();
