@@ -150,7 +150,6 @@ export default {
         `http://127.0.0.1:5000/get_${format}`,
         body
       );
-      console.log(response);
       const downloadUrl = response.data.path;
       const link = document.createElement('a');
       link.href = downloadUrl;
@@ -163,7 +162,6 @@ export default {
       if (this.observation.PatientInfo) {
         this.form = this.observation.PatientInfo;
       }
-      console.log(this.observation.Predictions);
       this.pathologiesApproves = Object.keys(this.observation.Predictions).map(
         (el) => {
           return { label: el, value: this.observation.Predictions[el] > 0 };

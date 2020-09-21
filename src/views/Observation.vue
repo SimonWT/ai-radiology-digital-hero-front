@@ -1,12 +1,12 @@
 <template>
   <div class="observation">
-    {{ observation.id }}
+    Файл: {{ observation.Filename }}
     <el-row>
       <el-col :span="12">
-        <ObservationForm ref="form" :isPatient="isPatient" :observation="observation" />
+        <ObservationForm :key="'form' + key" ref="form" :isPatient="isPatient" :observation="observation" />
       </el-col>
       <el-col :span="12" class="viewer">
-        <DicomViewer ref="viewer" :isPatient="isPatient" :observation="observation" />
+        <DicomViewer :key="'viewer' + key" ref="viewer" :isPatient="isPatient" :observation="observation" />
       </el-col>
     </el-row>
   </div>
@@ -26,6 +26,11 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      key: 0
+    }
+  },
   computed: {
     observation() {
       return store.getters.observation;
@@ -34,6 +39,7 @@ export default {
   beforeRouteUpdate(to,from,next){
     this.$refs.viewer.updateDwv()
     this.$refs.form.loadDatabaseData()
+    next();
   },
   beforeRouteEnter(to, from, next) {
     if (

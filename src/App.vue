@@ -67,14 +67,14 @@ export default {
             const id = doc.key;
             let info = doc.val();
             this.history.push({ id, Num: iter, ...info });
-            console.log('old', oldHistory[iter - 1]);
             if (
               oldHistory[iter - 1] &&
               info.Predicted != oldHistory[iter - 1].Predicted
             ) {
+              let message = `Предсказание сделано в #${iter}, проверьте историю`
               this.$notify({
                 title: 'Предсказание',
-                message: 'Предсказание сделано, проверьте историю',
+                message: message,
                 type: 'info',
               });
             }

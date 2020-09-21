@@ -70,7 +70,6 @@ export default {
       showPredictedVisual: false,
       dwvApp: null,
       tools: {
-        Scroll: {},
         ZoomAndPan: {},
         WindowLevel: {},
         Draw: {
@@ -107,6 +106,7 @@ export default {
       document.getElementById('file-input').click();
     },
     updateDwv() {
+      this.dwvApp.reset();
       // create app
       this.dwvApp = new dwv.App();
       // initialise app
@@ -115,7 +115,8 @@ export default {
         tools: this.tools,
       });
       const url = this.showPredictedVisual ? this.observation.Visualisation_url : this.observation.Source_url;
-      console.log(url);
+      console.log(this.observation.Filename);
+      
       this.dwvApp.loadURLs([url]);
     },
     toggleVisualisation(){

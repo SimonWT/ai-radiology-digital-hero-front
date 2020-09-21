@@ -1,6 +1,13 @@
 <template>
   <div class="history">
     <h5 class="h5">
+      <el-checkbox v-model="pathologyOrder" border class="order-btn">
+        <img
+          src="@/assets/icons8-high-priority.svg"
+          style="height: 24px; width: 24px;"
+          alt=""
+        />
+      </el-checkbox>
       История
       <i
         @click="$emit('hide-history')"
@@ -9,7 +16,7 @@
       ></i>
     </h5>
     <ul class="infinite-list" style="overflow:auto">
-      <li v-for="(item, i) in history" class="infinite-list-item" :key="i">
+      <li v-for="(item, i) in getHistory" class="infinite-list-item" :key="i">
         <el-card shadow="hover" class="card" @click.native="showItem(i)">
           <div class="card-info mb-1">
             <span class="id mb-1">#{{ item.Num }}</span>
@@ -24,7 +31,7 @@
             >
           </div>
           <div class="file-info">
-            <i class="el-icon-document mr-1" /> {{item.Filename}}
+            <i class="el-icon-document mr-1" /> {{ item.Filename }}
           </div>
           <div class="card-info">
             <div class="date">
@@ -55,7 +62,6 @@
 </template>
 
 <script>
-// import UserAccessModal from './UserAccessModal';
 export default {
   props: {
     history: {
@@ -63,23 +69,35 @@ export default {
       default: [],
     },
   },
-  // components: { UserAccessModal },
+  data() {
+    return {
+      pathologyOrder: false
+    }
+  },
+  computed: {
+    getHistory(){
+      if(this.pathologyOrder){
+        return []
+      }else{
+        return [...this.history].reverse()
+      }
+    }
+  },
   methods: {
     showItem(id) {
-      this.$store.dispatch('setObservation', this.history[id]);
-      this.$router.push(`/observation/${this.history[id].id}`);
+      const key = this.getHistory[id].id
+      this.$store.dispatch('setObservation', this.getHistory[id]);
+      this.$router.replace(`/observation/${key}`);
     },
     showAccess(id) {
-      const key = this.history[id].id;
-      const code = this.history[id].PatientPassword;
-      this.$emit('show-user-access', {key, code})
+      const key = this.getHistory[id].id;
+      const code = this.getHistory[id].PatientPassword;
+      this.$emit('show-user-access', { key, code });
     },
     getDate(mili) {
       var date = new Date(mili);
       var datetext = date.toTimeString();
       datetext = datetext.split(' ')[0];
-
-      console.log(datetext);
       return (
         (date.getMonth() > 8
           ? date.getMonth() + 1
@@ -171,5 +189,22 @@ li {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.order-btn {
+  position: absolute;
+  left: 12px;
+  top: 11px;
+  ::v-deep &.el-checkbox {
+    padding: 5px;
+    height: 34px;
+    width: 34px;
+  }
+  ::v-deep .el-checkbox__inner {
+    display: none;
+  }
+  ::v-deep .el-checkbox__label {
+    padding: 0;
+  }
 }
 </style>
