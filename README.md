@@ -10,6 +10,13 @@ npm install
 npm run dev
 ```
 
+
+### Credentials to Sign In
+```
+doctor@med.ru
+123456
+```
+
 ### Compiles and minifies for production
 ```
 npm run build
