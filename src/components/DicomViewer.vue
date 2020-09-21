@@ -1,6 +1,6 @@
 <template>
   <div class="dicom-viewer">
-    <div class="tools-menu">
+    <div class="tools-menu" v-if="!isPatient">
       <el-checkbox
         v-model="isPrediction"
         :disabled="!observation.Predicted"
@@ -55,6 +55,10 @@ export default {
   name: 'Upload',
   props: {
     observation: {},
+     isPatient: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -62,6 +66,7 @@ export default {
         dwv: dwv.getVersion(),
         vue: Vue.version,
       },
+      showPredictedVisual: false,
       dwvApp: null,
       tools: {
         Scroll: {},
@@ -111,6 +116,9 @@ export default {
       const url = this.observation.Source_url;
       console.log(url);
       this.dwvApp.loadURLs([url]);
+    },
+    toggleVisualisation(){
+
     },
     handleSelectFiles(event) {
       event.stopPropagation();

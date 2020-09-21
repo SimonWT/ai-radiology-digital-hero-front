@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header v-show="$store.getters.isLoggedIn"
+      <el-header v-show="!this.$route.path.includes('patient') && $store.getters.isLoggedIn"
         ><Header @show-history="toggleHistory"
       /></el-header>
       <el-container>

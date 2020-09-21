@@ -6,8 +6,10 @@
       width="30%"
     >
       <span class="text-left">
-        <div class="link">Ссылка: <a href="">http://нашхост/obserbation/hash</a></div>
-        <div class="password">Пароль для входа: 123456</div>
+        <div class="link">
+          Ссылка: <a target="_blank" :href="baseLink + key">{{baseLink + key}}</a>
+        </div>
+        <div class="password">Пароль для входа: {{code}}</div>
       </span>
       <span slot="footer">
         <el-button type="primary" @click="dialogVisible = false"
@@ -27,10 +29,15 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      baseLink: 'http://localhost:8080/patient/report/',
+      key: '',
+      code: ''
     };
   },
   methods: {
-    open() {
+    open(key, code) {
+      this.key = key;
+      this.code = code;
       this.dialogVisible = true;
     },
   },

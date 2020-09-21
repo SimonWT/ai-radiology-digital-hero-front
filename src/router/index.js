@@ -5,6 +5,7 @@ import Upload from '../views/Upload.vue'
 import Login from '../views/Login.vue'
 import Observation from '../views/Observation.vue'
 import Profile from '../views/Profile.vue'
+import PatientReport from '../views/PatientReport.vue'
 import store from '../store';
 
 Vue.use(VueRouter)
@@ -34,6 +35,11 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/patient/report/:id',
+    name: 'PatientReport',
+    component: PatientReport
   },
   {
     path: '/about',

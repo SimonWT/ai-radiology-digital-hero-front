@@ -1,15 +1,15 @@
 <template>
-  <div class="upload-form" v-loading="loading">
+  <div class="upload-form" v-loading="loading" :class="{'is-patient': isPatient}">
     <h5 class="h5 mb-3 text-center">Данные пациента</h5>
     <el-form :label-position="'left'" label-width="100px" :model="form">
       <el-form-item label="ФИО">
-        <el-input v-model="form.Fullname"></el-input>
+        <el-input :disabled="isPatient" v-model="form.Fullname"></el-input>
       </el-form-item>
       <el-form-item label="Лечущий врач">
-        <el-input v-model="form.HealingDoctor"></el-input>
+        <el-input v-model="form.HealingDoctor" :disabled="isPatient"></el-input>
       </el-form-item>
       <el-form-item label="Жалобы">
-        <el-input v-model="form.Сomplaints"></el-input>
+        <el-input :disabled="isPatient" v-model="form.Сomplaints"></el-input>
       </el-form-item>
       <el-form-item label="Дата обращения">
         <el-date-picker
@@ -21,7 +21,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="Детальное описание">
-        <el-input type="textarea" v-model="form.Description"></el-input>
+        <el-input type="textarea" :disabled="isPatient" v-model="form.Description"></el-input>
       </el-form-item>
       <el-form-item
         label="Патологии"
@@ -33,10 +33,11 @@
           :key="i"
           v-model="pat.value"
           :label="pat.label"
+          :disabled="isPatient"
           border
         ></el-checkbox>
       </el-form-item>
-      <el-form-item label="Дообучение">
+      <el-form-item label="Дообучение" v-if="!isPatient">
         <el-button
           v-if="!AdditionalTraining"
           @click="AdditionalTraining = true"
@@ -52,13 +53,13 @@
           ><i class="el-icon-circle-close mr-1" />Убрать с дообучения</el-button
         >
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="!isPatient">
         <el-button class="mb-1" type="success" @click="saveForm"
           >Сохранить</el-button
         >
       </el-form-item>
     </el-form>
-    <div>
+    <div v-if="!isPatient">
       <p class="font-weight-bold">Скачать:</p>
       <el-button class="mb-1" type=""
         ><i class="el-icon-notebook-2" />
@@ -88,6 +89,10 @@ export default {
   name: 'ObservationForm',
   props: {
     observation: {},
+    isPatient: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -134,7 +139,7 @@ export default {
         }
       );
       this.form.datetime = Date(this.observation.Date);
-      this.AdditionalTraining = this.observation.AdditionalTraining;
+      this.AdditionalTraining = this.observation.AdditionalTraining ?? this.AdditionalTraining;
     },
     async saveForm() {
       this.loading = true;
@@ -178,6 +183,18 @@ export default {
     width: 169px;
     margin-right: 15px !important;
     margin-left: 10px;
+  }
+  &.is-patient{
+    .el-textarea__inner, .el-input__inner, .el-checkbox__label{
+      color: black !important;
+    }
+    .el-checkbox__inner{
+      // background-color: #409EFF !important;
+      // border-color: #409EFF !important;
+      &:after{
+        border-color: #409EFF !important;
+      }
+    }
   }
 }
 </style>

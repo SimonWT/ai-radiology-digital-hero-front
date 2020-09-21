@@ -25,10 +25,10 @@
                   <i class="icon el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="showItem(item.id)"
+                  <el-dropdown-item @click.native="showItem(i)"
                     ><i class="el-icon-view" />Открыть</el-dropdown-item
                   >
-                  <el-dropdown-item @click.native="showAccess(item.id)"
+                  <el-dropdown-item @click.native="showAccess(i)"
                     ><i class="el-icon-key" />Дать доступ
                     пациенту</el-dropdown-item
                   >
@@ -59,7 +59,9 @@ export default {
       this.$router.push(`/observation/${this.history[id].id}`);
     },
     showAccess(id) {
-      this.$refs.modal.open();
+      const key = this.history[id].id
+      const code = this.history[id].PatientPassword
+      this.$refs.modal.open(key, code);
     },
     getDate(mili){
         var date = new Date(mili);

@@ -3,10 +3,10 @@
     {{ observation.id }}
     <el-row>
       <el-col :span="12">
-        <ObservationForm ref="form" :observation="observation" />
+        <ObservationForm ref="form" :isPatient="isPatient" :observation="observation" />
       </el-col>
       <el-col :span="12" class="viewer">
-        <DicomViewer ref="viewer" :observation="observation" />
+        <DicomViewer ref="viewer" :isPatient="isPatient" :observation="observation" />
       </el-col>
     </el-row>
   </div>
@@ -20,6 +20,12 @@ import store from '../store';
 
 export default {
   components: { ObservationForm, DicomViewer },
+  props: {
+    isPatient: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     observation() {
       return store.getters.observation;
