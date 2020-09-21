@@ -167,7 +167,7 @@ export default {
           return { label: el, value: this.observation.Predictions[el] > 0 };
         }
       );
-      this.form.datetime = Date(this.observation.Date);
+      this.form.datetime = new Date(this.observation.Date);
       this.AdditionalTraining =
         this.observation.AdditionalTraining ?? this.AdditionalTraining;
     },

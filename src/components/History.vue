@@ -71,21 +71,39 @@ export default {
   },
   data() {
     return {
-      pathologyOrder: false
-    }
+      pathologyOrder: false,
+    };
   },
   computed: {
-    getHistory(){
-      if(this.pathologyOrder){
-        return []
-      }else{
-        return [...this.history].reverse()
+    getHistory() {
+      if (this.pathologyOrder) {
+        return [...this.history].sort((a, b) => {
+          let sumA = 0
+          let sumB = 0
+          Object.keys(a.Predictions).forEach(el => {
+            sumA+= a.Predictions[el]
+          }, sumA)
+          Object.keys(b.Predictions).forEach(el => {
+            sumB+= b.Predictions[el]
+          }, sumB)
+          console.log(sumA, sumB, sumA < sumB)
+          if (sumA > sumB) {
+            return -1;
+          }
+          if (sumA < sumB) {
+            return 1;
+          }
+          // a должно быть равным b
+          return 0;
+        });
+      } else {
+        return [...this.history].reverse();
       }
-    }
+    },
   },
   methods: {
     showItem(id) {
-      const key = this.getHistory[id].id
+      const key = this.getHistory[id].id;
       this.$store.dispatch('setObservation', this.getHistory[id]);
       this.$router.replace(`/observation/${key}`);
     },
