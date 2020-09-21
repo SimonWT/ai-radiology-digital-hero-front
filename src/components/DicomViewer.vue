@@ -38,6 +38,7 @@
 import dwv from 'dwv';
 import { fbApp } from '../main';
 import Vue from 'vue';
+import store from '../store';
 
 // gui overrides
 
@@ -55,11 +56,18 @@ dwv.image.decoderScripts = {
 export default {
   name: 'Upload',
   props: {
-    observation: {},
+    propObservation: {
+      default: null
+    },
      isPatient: {
       type: Boolean,
       default: false
     }
+  },
+   computed: {
+    observation() {
+      return store.getters.observation;
+    },
   },
   data() {
     return {
@@ -97,7 +105,7 @@ export default {
       containerDivId: 'dwv',
       tools: this.tools,
     });
-    const url = this.observation.Source_url;
+    const url = this.propObservation ? this.propObservation.Source_url: this.observation.Source_url;
     console.log(url);
     this.dwvApp.loadURLs([url]);
   },

@@ -6,7 +6,7 @@
         <ObservationForm :key="'form' + key" ref="form" :isPatient="isPatient" :observation="observation" />
       </el-col>
       <el-col :span="12" class="viewer">
-        <DicomViewer :key="'viewer' + key" ref="viewer" :isPatient="isPatient" :observation="observation" />
+        <DicomViewer :key="'viewer' + key" ref="viewer" :isPatient="isPatient" />
       </el-col>
     </el-row>
   </div>
