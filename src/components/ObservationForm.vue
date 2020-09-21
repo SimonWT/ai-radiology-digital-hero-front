@@ -69,18 +69,11 @@
     </el-form>
     <div v-if="!isPatient">
       <p class="font-weight-bold">Скачать:</p>
-      <el-button class="mb-1" type=""
-        ><i class="el-icon-notebook-2" />
-        <a href="../assets/sr-report.dcm" download="Report.dcm"
-          >SR отчет</a
-        ></el-button
+      <el-button class="mb-1" type="" @click.prevent="downloadReport('sr')"
+        ><i class="el-icon-notebook-2" /> SR отчет</el-button
       >
-      <el-button class="" type=""
-        ><i class="el-icon-document" /><a
-          href="../assets/report.docx"
-          download="Report.docx"
-          >Текстовый отчет</a
-        ></el-button
+      <el-button class="" type="" @click.prevent="downloadReport('docx')"
+        ><i class="el-icon-document" />Текстовый отчет</el-button
       >
       <el-button class="" type="">
         <i class="el-icon-circle-check" />
@@ -141,6 +134,31 @@ export default {
     this.loadDatabaseData();
   },
   methods: {
+    async downloadReport(format) {
+      const Predictions = {};
+      this.pathologiesApproves.map((el) => {
+        Predictions[el.label] = el.value ? 1 : 0;
+      });
+      const body = {
+        patient_name: this.form.Fullname,
+        doctor_name: this.form.HealingDoctor,
+        date: this.observation.Date,
+        description: this.form.Description,
+        pathologies: Predictions,
+      };
+      const response = await this.axios.post(
+        `http://127.0.0.1:5000/get_${format}`,
+        body
+      );
+      console.log(response);
+      const downloadUrl = response.data.path;
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', `report.${format === 'sr'? 'dcm' : format}`); //any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    },
     loadDatabaseData() {
       if (this.observation.PatientInfo) {
         this.form = this.observation.PatientInfo;
