@@ -3,7 +3,7 @@
     {{ observation.id }}
     <el-row>
       <el-col :span="12">
-        <ObservationForm :observation="observation" />
+        <ObservationForm ref="form" :observation="observation" />
       </el-col>
       <el-col :span="12" class="viewer">
         <DicomViewer ref="viewer" :observation="observation" />
@@ -27,6 +27,7 @@ export default {
   },
   beforeRouteUpdate(to,from,next){
     this.$refs.viewer.updateDwv()
+    this.$refs.form.loadDatabaseData()
   },
   beforeRouteEnter(to, from, next) {
     if (

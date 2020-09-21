@@ -3,6 +3,7 @@
     <div class="tools-menu">
       <el-checkbox
         v-model="isPrediction"
+        :disabled="!observation.Predicted"
         label="Предсказание"
         border
         class="mr-1"

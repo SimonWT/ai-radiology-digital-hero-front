@@ -1,15 +1,15 @@
 <template>
-  <div class="upload-form">
+  <div class="upload-form" v-loading="loading">
     <h5 class="h5 mb-3 text-center">Данные пациента</h5>
     <el-form :label-position="'left'" label-width="100px" :model="form">
       <el-form-item label="ФИО">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.Fullname"></el-input>
       </el-form-item>
       <el-form-item label="Лечущий врач">
-        <el-input v-model="form.doctor"></el-input>
+        <el-input v-model="form.HealingDoctor"></el-input>
       </el-form-item>
       <el-form-item label="Жалобы">
-        <el-input v-model="form.complaints"></el-input>
+        <el-input v-model="form.Сomplaints"></el-input>
       </el-form-item>
       <el-form-item label="Дата обращения">
         <el-date-picker
@@ -21,9 +21,13 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="Детальное описание">
-        <el-input type="textarea" v-model="form.description"></el-input>
+        <el-input type="textarea" v-model="form.Description"></el-input>
       </el-form-item>
-      <el-form-item label="Патологии" v-loading="!predictionReady" element-loading-text="Данные еще обрабатываются...">
+      <el-form-item
+        label="Патологии"
+        v-loading="!observation.Predicted"
+        element-loading-text="Данные еще обрабатываются..."
+      >
         <el-checkbox
           v-for="(pat, i) in pathologiesApproves"
           :key="i"
@@ -32,53 +36,70 @@
           border
         ></el-checkbox>
       </el-form-item>
-      <el-form-item >
-        <el-button class="mb-1" type="success">Сохранить</el-button>
-        <el-button class="" type="">Отправить на дообучение</el-button>
+      <el-form-item label="Дообучение">
+        <el-button
+          v-if="!AdditionalTraining"
+          @click="AdditionalTraining = true"
+          class=""
+          type=""
+          >Отправить на дообучение</el-button
+        >
+        <el-button
+          v-else
+          class=""
+          @click="AdditionalTraining = false"
+          type="danger"
+          ><i class="el-icon-circle-close mr-1" />Убрать с дообучения</el-button
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-button class="mb-1" type="success" @click="saveForm"
+          >Сохранить</el-button
+        >
       </el-form-item>
     </el-form>
     <div>
       <p class="font-weight-bold">Скачать:</p>
-       <el-button class="mb-1" type=""><i class="el-icon-notebook-2" /> <a href="../assets/sr-report.dcm" download="Report.dcm">SR отчет</a></el-button>
-        <el-button class="" type=""><i class="el-icon-document" /><a href="../assets/report.docx" download="Report.docx">Текстовый отчет</a></el-button>
-        <el-button class="" type=""> <i class="el-icon-circle-check"/> Согласие на обработку персональных данных</el-button>
+      <el-button class="mb-1" type=""
+        ><i class="el-icon-notebook-2" />
+        <a href="../assets/sr-report.dcm" download="Report.dcm"
+          >SR отчет</a
+        ></el-button
+      >
+      <el-button class="" type=""
+        ><i class="el-icon-document" /><a
+          href="../assets/report.docx"
+          download="Report.docx"
+          >Текстовый отчет</a
+        ></el-button
+      >
+      <el-button class="" type="">
+        <i class="el-icon-circle-check" /> Согласие на обработку персональных
+        данных</el-button
+      >
     </div>
   </div>
 </template>
 
 <script>
+import { fbApp } from '../main';
+
 export default {
-  name: "ObservationForm",
+  name: 'ObservationForm',
   props: {
-    observation:{}
+    observation: {},
   },
   data() {
     return {
-      predictionReady: true,
+      loading: false,
+      AdditionalTraining: false,
       form: {
-        name: '',
-        complaints: '',
-        doctor: '',
+        Fullname: '',
+        Сomplaints: '',
+        HealingDoctor: '',
         datetime: null,
-        diagnosis: '',
-        description: '',
+        Description: '',
       },
-      pathologies2: [
-        { name: 'Atelectasis', pred: 5, approve: false },
-        { name: 'Cardiomegaly', pred: 0, approve: false },
-        { name: 'Effusion', pred: 4, approve: false },
-        { name: 'Infiltration', pred: 6, approve: false },
-        { name: 'Mass', pred: 16, approve: false },
-        { name: 'Nodule', pred: 0, approve: false },
-        { name: 'Pneumonia', pred: 72, approve: false },
-        { name: 'Pneumothorax', pred: 2, approve: false },
-        { name: 'Consolidation', pred: 0, approve: false },
-        { name: 'Edema', pred: 0, approve: false },
-        { name: 'Emphysema', pred: 0, approve: false },
-        { name: 'Fibrosis', pred: 0, approve: false },
-        { name: 'Pleural_Thickening', pred: 0, approve: false },
-        { name: 'Hernia', pred: 0, approve: false },
-      ],
       pathologies: {
         Atelectasis: 5,
         Cardiomegaly: 0,
@@ -99,10 +120,48 @@ export default {
     };
   },
   mounted() {
-    this.pathologiesApproves = Object.keys(this.observation.Predicitons).map((el) => {
-      return { label: el, value: this.observation.Predicitons[el] > 0 };
-    });
-    this.form.datetime = Date(this.observation.Date)
+    this.loadDatabaseData();
+  },
+  methods: {
+    loadDatabaseData() {
+      if (this.observation.PatientInfo) {
+        this.form = this.observation.PatientInfo;
+      }
+      console.log(this.observation.Predictions);
+      this.pathologiesApproves = Object.keys(this.observation.Predictions).map(
+        (el) => {
+          return { label: el, value: this.observation.Predictions[el] > 0 };
+        }
+      );
+      this.form.datetime = Date(this.observation.Date);
+      this.AdditionalTraining = this.observation.AdditionalTraining;
+    },
+    async saveForm() {
+      this.loading = true;
+      const PatientInfo = {
+        Fullname: this.form.Fullname,
+        HealingDoctor: this.form.HealingDoctor,
+        Сomplaints: this.form.Сomplaints,
+        Description: this.form.Description,
+      };
+
+      const Predictions = {};
+      this.pathologiesApproves.map((el) => {
+        Predictions[el.label] = el.value ? 1 : 0;
+      });
+
+      fbApp
+        .database()
+        .ref(`History/${this.observation.id}`)
+        .update({
+          PatientInfo: PatientInfo,
+          Predictions: Predictions,
+          AdditionalTraining: this.AdditionalTraining,
+        })
+        .catch((error) => this.$message.error('Ошибка ' + error))
+        .then((resp) => this.$message.success('Изменения сохранены'))
+        .finally(() => (this.loading = false));
+    },
   },
 };
 </script>

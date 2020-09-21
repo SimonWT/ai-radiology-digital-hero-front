@@ -1,62 +1,81 @@
 <template>
-<div id="app">
-  <el-container>
-    <el-header v-show="$store.getters.isLoggedIn"><Header @show-history="toggleHistory" /></el-header>
+  <div id="app">
     <el-container>
-      <el-aside width="300px" v-if="showAside"><History @hide-history="toggleHistory" :history="history" /></el-aside>
+      <el-header v-show="$store.getters.isLoggedIn"
+        ><Header @show-history="toggleHistory"
+      /></el-header>
       <el-container>
-        <el-main><router-view @show-history="showHistory"></router-view></el-main>
-        <el-footer v-if="false">Подвал</el-footer>
+        <el-aside width="300px" v-if="showAside"
+          ><History @hide-history="toggleHistory" :history="history"
+        /></el-aside>
+        <el-container>
+          <el-main
+            ><router-view @show-history="showHistory"></router-view
+          ></el-main>
+          <el-footer v-if="false">Подвал</el-footer>
+        </el-container>
       </el-container>
     </el-container>
-  </el-container>
-</div>
+  </div>
 </template>
 
 <script>
-import Header from './components/Header'
-import History from './components/History'
-import { fbApp } from './main'
+import Header from './components/Header';
+import History from './components/History';
+import { fbApp } from './main';
 
 export default {
-  components: {Header, History},
+  components: { Header, History },
   data() {
     return {
       showAside: false,
-      history: []
-    }
+      history: [],
+    };
   },
-  created(){
-    this.listenHistory()
-    console.log(this.$route)
+  created() {
+    this.listenHistory();
+    console.log(this.$route);
   },
   methods: {
-    showHistory(){
-      this.showAside = true
+    showHistory() {
+      this.showAside = true;
     },
-    toggleHistory(){
-      this.showAside = !this.showAside
+    toggleHistory() {
+      this.showAside = !this.showAside;
     },
-    listenHistory(){
-      fbApp.database().ref('History').on('value', (snapshot) => {
-        this.history = []
-        // let iter = snapshot.numChildren()
-        let iter = 1
-        snapshot.forEach((doc) => {
-          const id = doc.key
-          let info = doc.val()
-          this.history.push({id, Num: iter, ...info})
-          iter += 1
-        })
-      })
-    }
-  }
-}
+    listenHistory() {
+      fbApp
+        .database()
+        .ref('History')
+        .on('value', (snapshot) => {
+          let oldHistory = [...this.history];
+          this.history = [];
+          let iter = 1;
+          snapshot.forEach((doc) => {
+            const id = doc.key;
+            let info = doc.val();
+            this.history.push({ id, Num: iter, ...info });
+            console.log('old', oldHistory[iter - 1])
+            if (oldHistory[iter - 1] && info.Predicted != oldHistory[iter - 1].Predicted) {
+              this.$notify({
+                title: 'Предсказание',
+                message: 'Предсказание сделано, проверьте историю',
+                type: 'info',
+              });
+            }
+            iter += 1;
+          });
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
-html, body, html * {
+@import url(http://fonts.googleapis.com/css?family=Roboto:400);
+html,
+body,
+html * {
   font-family: 'Roboto', sans-serif;
   margin: 0;
 }

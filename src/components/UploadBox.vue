@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-box">
+  <div class="upload-box" v-loading="loading">
     <el-upload
       class="upload-demo"
       drag
@@ -8,7 +8,7 @@
       :on-remove="handleRemove"
       :on-change="handleChange"
       :file-list="fileList"
-      accept="file/png, file/jpeg, file/dcm"
+      accept=".png, .jpeg, .dcm"
       :auto-upload="false"
       multiple
     >
@@ -32,15 +32,18 @@ export default {
   data() {
     return {
       fileList: [],
+      loading: false
     };
   },
   methods: {
     handleChange(file, fileList) {
+        if(file)
         this.fileList = fileList
     },
     handleRemove() {},
     handlePreview() {},
     async sumbitUpload() {
+      this.loading = true
       const form = new FormData();
       this.fileList.forEach(el => {
           console.log(el.name)
@@ -58,10 +61,14 @@ export default {
           title: 'Успех',
           message: 'Файлы загруженны на сервер',
           type: 'success',
-        });
+        })
         this.$emit('uploaded');
         this.fileList = [];
       })
+      .catch(() => {
+        this.$message.error('Ошибка загрузки. Попробуйте еще раз.')
+      })
+      .finally(() =>  this.loading = false);
     },
   },
 };
