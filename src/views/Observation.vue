@@ -2,10 +2,10 @@
   <div class="observation">
     {{ observation.id }}
     <el-row>
-      <el-col :span="9">
+      <el-col :span="12">
         <ObservationForm :observation="observation" />
       </el-col>
-      <el-col :span="15" class="viewer">
+      <el-col :span="12" class="viewer">
         <DicomViewer ref="viewer" :observation="observation" />
       </el-col>
     </el-row>
