@@ -90,12 +90,13 @@ import { fbApp, backendUrl } from '../main';
 export default {
   name: 'ObservationForm',
   props: {
-    observation: {},
+    propObservation: {},
     isPatient: {
       type: Boolean,
       default: false,
     },
   },
+  
   data() {
     return {
       loading: false,
@@ -129,6 +130,14 @@ export default {
   mounted() {
     this.loadDatabaseData();
   },
+  computed: {
+    observation() {
+      return this.$store.getters.observation;
+    },
+    origin(){
+      return this.isPatient? this.propObservation : this.observation
+    }
+  },
   methods: {
     async downloadReport(format) {
       const Predictions = {};
@@ -138,7 +147,7 @@ export default {
       const body = {
         patient_name: this.form.Fullname,
         doctor_name: this.form.HealingDoctor,
-        date: this.observation.Date,
+        date: this.origin.Date,
         description: this.form.Description,
         pathologies: Predictions,
       };
@@ -165,17 +174,18 @@ export default {
       link.remove();
     },
     loadDatabaseData() {
-      if (this.observation.PatientInfo) {
-        this.form = this.observation.PatientInfo;
+      const origin = this.isPatient? this.propObservation : origin
+      if (this.origin.PatientInfo) {
+        this.form = this.origin.PatientInfo;
       }
-      this.pathologiesApproves = Object.keys(this.observation.Predictions).map(
+      this.pathologiesApproves = Object.keys(this.origin.Predictions).map(
         (el) => {
-          return { label: el, value: this.observation.Predictions[el] > 0 };
+          return { label: el, value: this.origin.Predictions[el] > 0 };
         }
       );
-      this.form.datetime = new Date(this.observation.Date);
+      this.form.datetime = new Date(this.origin.Date);
       this.AdditionalTraining =
-        this.observation.AdditionalTraining ?? this.AdditionalTraining;
+        this.origin.AdditionalTraining ?? this.AdditionalTraining;
     },
     async saveForm() {
       this.loading = true;
@@ -193,7 +203,7 @@ export default {
 
       fbApp
         .database()
-        .ref(`History/${this.observation.id}`)
+        .ref(`History/${this.origin.id}`)
         .update({
           PatientInfo: PatientInfo,
           Predictions: Predictions,

@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import {frontendUrl} from '../main'
 export default {
   props: {
     link: {},
@@ -29,7 +30,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      baseLink: 'http://localhost:8080/patient/report/',
+      baseLink: `${frontendUrl}/patient/report/`,
       key: '',
       code: ''
     };

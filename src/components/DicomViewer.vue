@@ -64,7 +64,7 @@ export default {
       default: false
     }
   },
-   computed: {
+  computed: {
     observation() {
       return store.getters.observation;
     },

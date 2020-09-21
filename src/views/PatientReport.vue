@@ -5,14 +5,14 @@
         <ObservationForm
           ref="form"
           :isPatient="true"
-          :observation="observation"
+          :propObservation="observation"
         />
       </el-col>
       <el-col :span="12" class="viewer">
         <DicomViewer
           ref="viewer"
           :isPatient="true"
-          :observation="observation"
+          :propObservation="observation"
         />
       </el-col>
     </el-row>

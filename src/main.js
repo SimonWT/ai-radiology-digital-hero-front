@@ -12,6 +12,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 const env = require('../env')
 export const backendUrl = env.backend_url
+export const frontendUrl = env.frontend_url
  
 Vue.use(VueAxios, axios)
 

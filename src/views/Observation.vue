@@ -3,7 +3,7 @@
     Файл: {{ observation.Filename }}
     <el-row>
       <el-col :span="12">
-        <ObservationForm :key="'form' + key" ref="form" :isPatient="isPatient" :observation="observation" />
+        <ObservationForm :key="'form' + key" ref="form" :isPatient="isPatient" />
       </el-col>
       <el-col :span="12" class="viewer">
         <DicomViewer :key="'viewer' + key" ref="viewer" :isPatient="isPatient" />
