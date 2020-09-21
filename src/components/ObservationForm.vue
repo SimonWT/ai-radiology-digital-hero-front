@@ -1,5 +1,9 @@
 <template>
-  <div class="upload-form" v-loading="loading" :class="{'is-patient': isPatient}">
+  <div
+    class="upload-form"
+    v-loading="loading"
+    :class="{ 'is-patient': isPatient }"
+  >
     <h5 class="h5 mb-3 text-center">Данные пациента</h5>
     <el-form :label-position="'left'" label-width="100px" :model="form">
       <el-form-item label="ФИО">
@@ -21,7 +25,11 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="Детальное описание">
-        <el-input type="textarea" :disabled="isPatient" v-model="form.Description"></el-input>
+        <el-input
+          type="textarea"
+          :disabled="isPatient"
+          v-model="form.Description"
+        ></el-input>
       </el-form-item>
       <el-form-item
         label="Патологии"
@@ -75,8 +83,13 @@
         ></el-button
       >
       <el-button class="" type="">
-        <i class="el-icon-circle-check" /> Согласие на обработку персональных
-        данных</el-button
+        <i class="el-icon-circle-check" />
+        <a
+          href="../assets/soglasie_pacienta_na_obrabotku_personalnykh_dannyk.pdf"
+          download="soglasie.pdf"
+        >
+          Согласие на обработку персональных данных</a
+        ></el-button
       >
     </div>
   </div>
@@ -91,8 +104,8 @@ export default {
     observation: {},
     isPatient: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -139,7 +152,8 @@ export default {
         }
       );
       this.form.datetime = Date(this.observation.Date);
-      this.AdditionalTraining = this.observation.AdditionalTraining ?? this.AdditionalTraining;
+      this.AdditionalTraining =
+        this.observation.AdditionalTraining ?? this.AdditionalTraining;
     },
     async saveForm() {
       this.loading = true;
@@ -184,15 +198,17 @@ export default {
     margin-right: 15px !important;
     margin-left: 10px;
   }
-  &.is-patient{
-    .el-textarea__inner, .el-input__inner, .el-checkbox__label{
+  &.is-patient {
+    .el-textarea__inner,
+    .el-input__inner,
+    .el-checkbox__label {
       color: black !important;
     }
-    .el-checkbox__inner{
+    .el-checkbox__inner {
       // background-color: #409EFF !important;
       // border-color: #409EFF !important;
-      &:after{
-        border-color: #409EFF !important;
+      &:after {
+        border-color: #409eff !important;
       }
     }
   }
