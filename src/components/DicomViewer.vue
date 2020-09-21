@@ -150,9 +150,8 @@ export default {
         this.dwvApp.setDrawShape(shape);
       }
     },
-    onReset: function() {
-      this.dwvApp.restoreOriginalImage();
-      //   this.dwvApp.resetLayout();
+    onReset() {
+      this.dwvApp.resetDisplay()
     },
     setupDropbox() {
       // start listening to drag events on the layer container
