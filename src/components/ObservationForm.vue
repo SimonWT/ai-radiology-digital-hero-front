@@ -75,14 +75,9 @@
       <el-button class="" type="" @click.prevent="downloadReport('docx')"
         ><i class="el-icon-document" />Текстовый отчет</el-button
       >
-      <el-button class="" type="">
+      <el-button class="" type="" @click="downloadSoglasie">
         <i class="el-icon-circle-check" />
-        <a
-          href="../assets/soglasie_pacienta_na_obrabotku_personalnykh_dannyk.pdf"
-          download="soglasie.pdf"
-        >
-          Согласие на обработку персональных данных</a
-        ></el-button
+          Согласие на обработку персональных данных</el-button
       >
     </div>
   </div>
@@ -155,6 +150,16 @@ export default {
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.setAttribute('download', `report.${format === 'sr'? 'dcm' : format}`); //any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    },
+    downloadSoglasie(){
+      const downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/digiathero---med.appspot.com/o/soglasie_pacienta_na_obrabotku_personalnykh_dannyk.pdf?alt=media&token=4aa6ef48-2b05-4856-9818-28e00b76bfa0';
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', `soglasie.pdf`);
+      link.setAttribute('target', '_blank');
       document.body.appendChild(link);
       link.click();
       link.remove();
