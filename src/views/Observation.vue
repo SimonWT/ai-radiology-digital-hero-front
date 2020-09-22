@@ -3,10 +3,18 @@
     Файл: {{ observation.Filename }}
     <el-row>
       <el-col :span="12">
-        <ObservationForm :key="'form' + key" ref="form" :isPatient="isPatient" />
+        <ObservationForm
+          :key="'form' + key"
+          ref="form"
+          :isPatient="isPatient"
+        />
       </el-col>
       <el-col :span="12" class="viewer">
-        <DicomViewer :key="'viewer' + key" ref="viewer" :isPatient="isPatient" />
+        <DicomViewer
+          :key="'viewer' + key"
+          ref="viewer"
+          :isPatient="isPatient"
+        />
       </el-col>
     </el-row>
   </div>
@@ -23,22 +31,22 @@ export default {
   props: {
     isPatient: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      key: 0
-    }
+      key: 0,
+    };
   },
   computed: {
     observation() {
       return store.getters.observation;
     },
   },
-  beforeRouteUpdate(to,from,next){
-    this.$refs.viewer.updateDwv()
-    this.$refs.form.loadDatabaseData()
+  beforeRouteUpdate(to, from, next) {
+    this.$refs.viewer.updateDwv();
+    this.$refs.form.loadDatabaseData();
     next();
   },
   beforeRouteEnter(to, from, next) {

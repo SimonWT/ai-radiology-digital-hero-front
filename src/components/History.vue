@@ -78,15 +78,15 @@ export default {
     getHistory() {
       if (this.pathologyOrder) {
         return [...this.history].sort((a, b) => {
-          let sumA = 0
-          let sumB = 0
-          Object.keys(a.Predictions).forEach(el => {
-            sumA+= a.Predictions[el]
-          }, sumA)
-          Object.keys(b.Predictions).forEach(el => {
-            sumB+= b.Predictions[el]
-          }, sumB)
-          console.log(sumA, sumB, sumA < sumB)
+          let sumA = 0;
+          let sumB = 0;
+          Object.keys(a.Predictions).forEach((el) => {
+            sumA += a.Predictions[el];
+          }, sumA);
+          Object.keys(b.Predictions).forEach((el) => {
+            sumB += b.Predictions[el];
+          }, sumB);
+          console.log(sumA, sumB, sumA < sumB);
           if (sumA > sumB) {
             return -1;
           }
