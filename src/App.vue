@@ -2,9 +2,6 @@
   <div id="app">
     <el-container>
       <el-header
-        v-show="
-          !this.$route.path.includes('patient') && $store.getters.isLoggedIn
-        "
         ><Header @show-history="toggleHistory"
       /></el-header>
       <el-container>
@@ -53,7 +50,8 @@ export default {
       this.showAside = true;
     },
     toggleHistory() {
-      this.showAside = !this.showAside;
+      if(this.$store.getters.isLoggedIn)
+        this.showAside = !this.showAside;
     },
     listenHistory() {
       fbApp

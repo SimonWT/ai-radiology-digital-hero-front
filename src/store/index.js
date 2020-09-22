@@ -16,6 +16,10 @@ export default new Vuex.Store({
     SET_OBSERVATION(state, payload) {
       state.observation = payload
     },
+    REMOVE_USER(state) {
+      state.user_email = null
+      localStorage.removeItem('user_email')
+    }
   },
   actions: {
     async fetchUser({ commit, getters, dispatch }, user) {
@@ -23,8 +27,13 @@ export default new Vuex.Store({
       commit('SET_USER', user.email);
     },
     setObservation({commit}, payload){
+      
       commit('SET_OBSERVATION', payload)
-    } 
+    },
+    logout({commit}) {
+      console.log('logginout');
+      commit('REMOVE_USER')
+    }
   },
   getters: {
     user_email(state) {

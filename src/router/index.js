@@ -58,6 +58,11 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log(to.path.includes('report'))
+  if(to.path.includes('report')){ 
+    next()
+    return
+  }
   if(to.path !== '/login'){
     if(store.getters.isLoggedIn){
       next()
