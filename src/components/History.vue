@@ -195,11 +195,6 @@ li {
   font-size: 14px;
 }
 
-.status {
-  // margin-top: -15px;
-  // margin-right: -15px;
-}
-
 .file-info {
   font-size: 14px;
   text-align: left;

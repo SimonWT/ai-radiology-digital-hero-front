@@ -1,4 +1,5 @@
-# ai-radiology-digital-hero-front
+# DigitalHero Hackatone 2020 | Medicine | Frontend
+AI Radiology Team 
 
 ## Project setup
 ```
@@ -10,27 +11,8 @@ npm install
 npm run dev
 ```
 
-
 ### Credentials to Sign In
 ```
 doctor@med.ru
 123456
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
